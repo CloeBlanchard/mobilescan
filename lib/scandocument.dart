@@ -31,69 +31,69 @@ class _ScanDocumentState extends State<ScanDocument> {
           // if _image is empty display text
           (_image.isEmpty)
               ? const Center(
-                  child: Text(
-                    "No image or photo ready to scan",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
-                )
-              // else _image is not empty, so display image in the body page
+            child: Text(
+              "No image or photo ready to scan",
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+          )
+          // else _image is not empty, so display image in the body page
               : Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  // scrolling effects
-                  child: CustomScrollView(
-                    primary: false,
-                    slivers: <Widget>[
-                      // custom scroll effects
-                      SliverPadding(
-                        padding: const EdgeInsets.all(3.0),
-                        sliver: SliverGrid.count(
-                            childAspectRatio: 10.0 / 9.0,
-                            mainAxisSpacing: 1, //horizontal space
-                            crossAxisSpacing: 1, //vertical space
-                            crossAxisCount: 3, //number of images for a row
-                            children: _image
-                                // create _image array
-                                .map((image) => Hero(
-                                      tag: image.path,
-                                      child: Stack(
-                                        children: [
-                                          // get file _image
-                                          Image.file(
-                                            image,
-                                            height: 150,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                3,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          // displays an icon when an image appears
-                                          Positioned(
-                                              right: 5,
-                                              top: 5,
-                                              child: GestureDetector(
-                                                onTap: () => _removeFile(_image
-                                                    .map((e) => e.path)
-                                                    .toList()
-                                                    .indexOf(image.path)),
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(3),
-                                                  child: const Icon(
-                                                    Icons.delete,
-                                                  ),
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                    ))
-                                // add to a list
-                                .toList()),
-                      ),
-                    ],
-                  ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            // scrolling effects
+            child: CustomScrollView(
+              primary: false,
+              slivers: <Widget>[
+                // custom scroll effects
+                SliverPadding(
+                  padding: const EdgeInsets.all(3.0),
+                  sliver: SliverGrid.count(
+                      childAspectRatio: 10.0 / 9.0,
+                      mainAxisSpacing: 1, //horizontal space
+                      crossAxisSpacing: 1, //vertical space
+                      crossAxisCount: 3, //number of images for a row
+                      children: _image
+                      // create _image array
+                          .map((image) => Hero(
+                        tag: image.path,
+                        child: Stack(
+                          children: [
+                            // get file _image
+                            Image.file(
+                              image,
+                              height: 150,
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width /
+                                  3,
+                              fit: BoxFit.cover,
+                            ),
+                            // displays an icon when an image appears
+                            Positioned(
+                                right: 5,
+                                top: 5,
+                                child: GestureDetector(
+                                  onTap: () => _removeFile(_image
+                                      .map((e) => e.path)
+                                      .toList()
+                                      .indexOf(image.path)),
+                                  child: Container(
+                                    padding:
+                                    const EdgeInsets.all(3),
+                                    child: const Icon(
+                                      Icons.delete,
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ))
+                      // add to a list
+                          .toList()),
                 ),
+              ],
+            ),
+          ),
           Positioned(
             height: MediaQuery.of(context).size.width - 20,
             bottom: 2 + MediaQuery.of(context).padding.bottom,
@@ -143,15 +143,16 @@ class _ScanDocumentState extends State<ScanDocument> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Icon(
+                  children: <Widget>[
+                    const Icon(
                       Icons.add_a_photo,
                       size: 29,
                     ),
                     Text(
                       "add photo camera",
-                      style:
-                          TextStyle(fontSize: 20),
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 1,
                     ),
                   ],
                 ),
@@ -164,14 +165,16 @@ class _ScanDocumentState extends State<ScanDocument> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Icon(
+                  children: <Widget>[
+                    const Icon(
                       Icons.image,
                       size: 29,
                     ),
                     Text(
                       "add photo gallery",
-                      style: TextStyle(fontSize: 20),
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 1,
                     ),
                   ],
                 ),

@@ -7,9 +7,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-
 class ScanDocument extends StatefulWidget {
-
   const ScanDocument({Key? key}) : super(key: key);
 
   @override
@@ -33,72 +31,71 @@ class _ScanDocumentState extends State<ScanDocument> {
           // if _image is empty display text
           (_image.isEmpty)
               ? const Center(
-            child: Text(
-              "No image or photo ready to scan",
-              style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold
-              ),
-            ),
-          )
-          // else _image is not empty, so display image in the body page
+                  child: Text(
+                    "No image or photo ready to scan",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                )
+              // else _image is not empty, so display image in the body page
               : Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            // scrolling effects
-            child: CustomScrollView(
-              primary: false,
-              slivers: <Widget>[
-                // custom scroll effects
-                SliverPadding(
-                  padding: const EdgeInsets.all(3.0),
-                  sliver: SliverGrid.count(
-                      childAspectRatio: 10.0 / 9.0,
-                      mainAxisSpacing: 1, //horizontal space
-                      crossAxisSpacing: 1, //vertical space
-                      crossAxisCount: 3, //number of images for a row
-                      children: _image
-                      // create _image array
-                          .map((image) => Hero(
-                        tag: image.path,
-                        child: Stack(
-                          children: [
-                            // get file _image
-                            Image.file(
-                              image,
-                              height: 150,
-                              width: MediaQuery.of(context).size.width / 3,
-                              fit: BoxFit.cover,
-                            ),
-                            // displays an icon when an image appears
-                            Positioned(
-                                right: 5,
-                                top: 5,
-                                child: GestureDetector(
-                                  onTap: () => _removeFile(_image
-                                      .map((e) => e.path)
-                                      .toList()
-                                      .indexOf(image.path)),
-                                  child: Container(
-                                    padding:
-                                    const EdgeInsets.all(3),
-                                    child: const Icon(
-                                      Icons.delete,
-                                    ),
-                                  ),
-                                )
-                            ),
-                          ],
-                        ),
-                      ))
-                      // add to a list
-                          .toList()),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  // scrolling effects
+                  child: CustomScrollView(
+                    primary: false,
+                    slivers: <Widget>[
+                      // custom scroll effects
+                      SliverPadding(
+                        padding: const EdgeInsets.all(3.0),
+                        sliver: SliverGrid.count(
+                            childAspectRatio: 10.0 / 9.0,
+                            mainAxisSpacing: 1, //horizontal space
+                            crossAxisSpacing: 1, //vertical space
+                            crossAxisCount: 3, //number of images for a row
+                            children: _image
+                                // create _image array
+                                .map((image) => Hero(
+                                      tag: image.path,
+                                      child: Stack(
+                                        children: [
+                                          // get file _image
+                                          Image.file(
+                                            image,
+                                            height: 150,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                3,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          // displays an icon when an image appears
+                                          Positioned(
+                                              right: 5,
+                                              top: 5,
+                                              child: GestureDetector(
+                                                onTap: () => _removeFile(_image
+                                                    .map((e) => e.path)
+                                                    .toList()
+                                                    .indexOf(image.path)),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(3),
+                                                  child: const Icon(
+                                                    Icons.delete,
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ))
+                                // add to a list
+                                .toList()),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
           Positioned(
-            height: 80,
+            height: MediaQuery.of(context).size.width - 20,
             bottom: 2 + MediaQuery.of(context).padding.bottom,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -115,9 +112,7 @@ class _ScanDocumentState extends State<ScanDocument> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomePage()
-                            )
-                        );
+                                builder: (context) => const HomePage()));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +126,6 @@ class _ScanDocumentState extends State<ScanDocument> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-
                         ],
                       ),
                     ),
@@ -141,14 +135,12 @@ class _ScanDocumentState extends State<ScanDocument> {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 80,
-        child: Row(
-          children: <Widget>[
-            ElevatedButton(
+      bottomNavigationBar: Row(
+        children: <Widget>[
+          Expanded(
+            child: ElevatedButton(
               onPressed: () => getDocumentFromCamera(),
-              child: SizedBox(
-                width: 50,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const <Widget>[
@@ -159,16 +151,17 @@ class _ScanDocumentState extends State<ScanDocument> {
                     Text(
                       "add photo camera",
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
               ),
             ),
-            ElevatedButton(
+          ),
+          Expanded(
+            child: ElevatedButton(
               onPressed: () => getDocumentFromGallery(),
-              child: SizedBox(
-                width: 50,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const <Widget>[
@@ -178,15 +171,14 @@ class _ScanDocumentState extends State<ScanDocument> {
                     ),
                     Text(
                       "add photo gallery",
-                      style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -210,8 +202,7 @@ class _ScanDocumentState extends State<ScanDocument> {
           ).show(context);
         }
       });
-    }
-    catch (error) {
+    } catch (error) {
       Flushbar(
         title: 'Warning',
         message: error.toString(),
@@ -266,8 +257,6 @@ class _ScanDocumentState extends State<ScanDocument> {
     }
   }
 
-
-
   /// function save pdf
   savePdf() async {
     try {
@@ -321,5 +310,4 @@ class _ScanDocumentState extends State<ScanDocument> {
       ).show(context);
     }
   }
-
 }

@@ -26,6 +26,7 @@ class HomePage extends StatefulWidget {
 }
 class _HomePageState extends State<HomePage> {
   dynamic files;
+  //directory for android
   final dir = getExternalStorageDirectory();
   // directory for ios
   final dirIOS = getApplicationSupportDirectory();
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           var pathRoot = await dirIOS;
           var filesManager = FileManager(root: pathRoot);
           files = await filesManager.filesTree(
-            // filteer list only pdf files
+            // filter list only pdf files
               extensions: ["pdf"]);
           //update the ui
           setState(() {});
@@ -151,14 +152,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       leading: Icon(
-                        Icons.picture_as_pdf,
-                        color: Colors.blue.shade900,
-                        size: 30,
+                        Icons.picture_as_pdf, color: Colors.blue.shade900, size: 30,
                       ),
                       trailing: Icon(
-                        Icons.arrow_forward,
-                        color: Colors.pink.shade900,
-                        size: 30,
+                        Icons.arrow_forward, color: Colors.pink.shade900, size: 30,
                       ),
                       onTap: () {
                         Navigator.push(context,
@@ -174,7 +171,7 @@ class _HomePageState extends State<HomePage> {
               // function who refresh the page
               onRefresh: () {
                 return Future.delayed(
-                    const Duration(seconds: 1),
+                    const Duration(seconds: 3),
                     () {
                       setState(() {
                         files.add([getFiles()]);
@@ -199,14 +196,12 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const <Widget>[
                       Icon(
-                        Icons.center_focus_strong,
-                        size: 29,
+                        Icons.center_focus_strong, size: 29,
                       ),
                       Text(
                         "Scan doc Page",
                         style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
+                            fontSize: 20, fontWeight: FontWeight.bold
                         ),
                       )
                     ],

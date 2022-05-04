@@ -30,16 +30,17 @@ class _ScanDocumentState extends State<ScanDocument> {
         children: [
           // if _image is empty display text
           (_image.isEmpty)
-              ? const Center(
+              ? Center(
             child: Text(
               "No image or photo ready to scan",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              textScaleFactor: MediaQuery.of(context).textScaleFactor,
+              maxLines: 1,
+              style: const TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold),
             ),
           )
           // else _image is not empty, so display image in the body page
               : Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
             // scrolling effects
             child: CustomScrollView(
               primary: false,
@@ -49,8 +50,8 @@ class _ScanDocumentState extends State<ScanDocument> {
                   padding: const EdgeInsets.all(3.0),
                   sliver: SliverGrid.count(
                       childAspectRatio: 10.0 / 9.0,
-                      mainAxisSpacing: 1, //horizontal space
-                      crossAxisSpacing: 1, //vertical space
+                      mainAxisSpacing: 20, //horizontal space
+                      crossAxisSpacing: 20, //vertical space
                       crossAxisCount: 3, //number of images for a row
                       children: _image
                       // create _image array
@@ -95,42 +96,39 @@ class _ScanDocumentState extends State<ScanDocument> {
             ),
           ),
           Positioned(
-            height: MediaQuery.of(context).size.width - 20,
-            bottom: 2 + MediaQuery.of(context).padding.bottom,
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              width: MediaQuery.of(context).size.width - 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // if _image is not empty display a button pdf converter
-                  if (_image.isNotEmpty)
-                    ElevatedButton(
-                      onPressed: () {
-                        createPdf();
-                        savePdf();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.picture_as_pdf,
-                            size: 31,
-                          ),
-                          Text(
-                            'Convert to pdf',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+              alignment: Alignment.center,
+              height: 90,
+              margin: const EdgeInsets.only(top: 420),
+              padding: const EdgeInsets.all(10.0),
+              child:
+              // if _image is not empty display a button pdf converter
+              (_image.isNotEmpty)
+                  ? ElevatedButton(
+                onPressed: () {
+                  createPdf();
+                  savePdf();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.picture_as_pdf,
+                      size: 31,
                     ),
-                ],
-              ),
+                    Text(
+                      'Convert to pdf',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              )
+                  : Container(),
             ),
           ),
         ],
@@ -141,6 +139,7 @@ class _ScanDocumentState extends State<ScanDocument> {
             child: ElevatedButton(
               onPressed: () => getDocumentFromCamera(),
               child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -163,6 +162,7 @@ class _ScanDocumentState extends State<ScanDocument> {
             child: ElevatedButton(
               onPressed: () => getDocumentFromGallery(),
               child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

@@ -166,13 +166,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                     leading: Icon(
                       Icons.picture_as_pdf,
-                      color: Colors.blue.shade900,
+                      color: Colors.blue.shade800,
                       size: 30,
                     ),
-                    trailing: Icon(
-                      Icons.arrow_forward,
-                      size: 30,
-                      color: Colors.pink.shade900,
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
+                      onPressed: () {
+                        _onDelete(File(files[index].path));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage())
+                        );
+                      },
                     ),
                     onTap: () {
                       Navigator.push(context,
@@ -188,28 +193,49 @@ class _HomePageState extends State<HomePage> {
           ]
       ),
       /// bottom navigation bar
-      bottomNavigationBar: SizedBox(
-        height: 80,
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ScanDocument()));
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Icon(
-                Icons.center_focus_strong,
-                size: 29,
+      bottomNavigationBar: Row(
+        children: <Widget>[
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ScanDocument())
+                );
+              },
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(
+                      Icons.center_focus_strong,
+                      size: 29,
+                    ),
+                    Text(
+                      "Scan you doc",
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Scan doc Page",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  /// function who delete file
+  Future<void> _onDelete(File file) async {
+    try {
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e) {
+      return;
+    }
   }
 }

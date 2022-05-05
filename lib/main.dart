@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all<Color>(Colors.pink.shade900),
           ),
         ),
-        ),
+      ),
       ///Dark theme mode
       dark: ThemeData(
         brightness: Brightness.dark,
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         drawerTheme: const DrawerThemeData(
-          backgroundColor: Colors.black54
+            backgroundColor: Colors.black54
         ),
 
       ),
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
       builder: (theme, darkTheme) =>
           MaterialApp(
             builder: (context, widget) => ResponsiveWrapper.builder(
-              ClampingScrollWrapper.builder(context, widget!),
+                ClampingScrollWrapper.builder(context, widget!),
                 breakpoints: []
             ),
             title: 'flutter theme dark',

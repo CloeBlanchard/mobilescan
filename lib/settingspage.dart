@@ -21,47 +21,46 @@ class _SettingsPageState extends State<SettingsPage> {
           centerTitle: true,
           title: const Text("Settings Page"),
         ),
-
         /// button to modify appearance
         body: Stack(
-            children: [
-              Positioned(
-                height: 80,
-                top: 2 + MediaQuery.of(context).padding.top,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const MyAppearancePage()),
-                            );
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
+          children: [
+            Positioned(
+              height: 80,
+              top: 2 + MediaQuery.of(context).padding.top,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width - 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const MyAppearancePage()),
+                          );
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
                                 Icons.edit,
                                 size: 29
+                            ),
+                            Text(
+                              "Modify Appearance",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold
                               ),
-                              Text(
-                                "Modify Appearance",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              )
-                            ],
-                          )
-                      )
-                    ],
-                  ),
+                            )
+                          ],
+                        )
+                    )
+                  ],
                 ),
-              )
-            ],
+              ),
+            )
+          ],
         )
     );
   }

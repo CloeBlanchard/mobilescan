@@ -28,7 +28,7 @@ class _ScanDocumentState extends State<ScanDocument> {
       ),
       body: Stack(
         children: [
-          // if _image is empty display text
+          /// if _image is empty display text
           (_image.isEmpty)
               ? Center(
             child: Text(
@@ -39,27 +39,27 @@ class _ScanDocumentState extends State<ScanDocument> {
                   fontSize: 20, fontWeight: FontWeight.bold),
             ),
           )
-          // else _image is not empty, so display image in the body page
+          /// else _image is not empty, so display image in the body page
               : Container(
-            // scrolling effects
+            /// scrolling effects
             child: CustomScrollView(
               primary: false,
               slivers: <Widget>[
-                // custom scroll effects
+                /// custom scroll effects
                 SliverPadding(
                   padding: const EdgeInsets.all(3.0),
                   sliver: SliverGrid.count(
                       childAspectRatio: 10.0 / 9.0,
-                      mainAxisSpacing: 20, //horizontal space
-                      crossAxisSpacing: 20, //vertical space
-                      crossAxisCount: 3, //number of images for a row
+                      mainAxisSpacing: 20, ///horizontal space
+                      crossAxisSpacing: 20, ///vertical space
+                      crossAxisCount: 3, ///number of images for a row
                       children: _image
-                      // create _image array
+                      /// create _image array
                           .map((image) => Hero(
                         tag: image.path,
                         child: Stack(
                           children: [
-                            // get file _image
+                            /// get file _image
                             Image.file(
                               image,
                               height: 150,
@@ -69,7 +69,7 @@ class _ScanDocumentState extends State<ScanDocument> {
                                   3,
                               fit: BoxFit.cover,
                             ),
-                            // displays an icon when an image appears
+                            /// displays an icon when an image appears
                             Positioned(
                                 right: 5,
                                 top: 5,
@@ -89,7 +89,7 @@ class _ScanDocumentState extends State<ScanDocument> {
                           ],
                         ),
                       ))
-                      // add to a list
+                      /// add to a list
                           .toList()),
                 ),
               ],
@@ -102,7 +102,7 @@ class _ScanDocumentState extends State<ScanDocument> {
               margin: const EdgeInsets.only(top: 420),
               padding: const EdgeInsets.all(10.0),
               child:
-              // if _image is not empty display a button pdf converter
+              /// if _image is not empty display a button pdf converter
               (_image.isNotEmpty)
                   ? ElevatedButton(
                 onPressed: () {
@@ -115,16 +115,15 @@ class _ScanDocumentState extends State<ScanDocument> {
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
+                  children: const [
+                    Icon(
                       Icons.picture_as_pdf,
                       size: 31,
                     ),
                     Text(
                       'Convert to pdf',
-                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                      style: const TextStyle(fontSize: 15),
-                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -190,17 +189,18 @@ class _ScanDocumentState extends State<ScanDocument> {
   /// function take photo from camera
   getDocumentFromCamera() async {
     try {
-      // source of method here the source is camera
+      /// source of method here the source is camera
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       setState(() {
-        // if source is not null
+        /// if source is not null
         if (pickedFile != null) {
-          // add photo
+          /// add photo
           _image.add(File(pickedFile.path));
         } else {
-          // else print a message
+          /// else print a message
           Flushbar(
             title: 'Be careful',
+            titleColor: Colors.pink,
             message: 'you have not selected a photo',
             duration: const Duration(seconds: 3),
           ).show(context);
@@ -209,8 +209,9 @@ class _ScanDocumentState extends State<ScanDocument> {
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }
@@ -218,17 +219,18 @@ class _ScanDocumentState extends State<ScanDocument> {
   /// function pick pictures from gallery
   getDocumentFromGallery() async {
     try {
-      // source of method here the source is gallery
+      /// source of method here the source is gallery
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       setState(() {
-        // if source is not null
+        /// if source is not null
         if (pickedFile != null) {
-          // add image
+          /// add image
           _image.add(File(pickedFile.path));
         } else {
-          // else print message
+          /// else print message
           Flushbar(
             title: 'Be careful',
+            titleColor: Colors.pink,
             message: 'you have not selected a image',
             duration: const Duration(seconds: 3),
           ).show(context);
@@ -237,8 +239,9 @@ class _ScanDocumentState extends State<ScanDocument> {
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }
@@ -255,8 +258,9 @@ class _ScanDocumentState extends State<ScanDocument> {
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }
@@ -270,25 +274,27 @@ class _ScanDocumentState extends State<ScanDocument> {
         await file.writeAsBytes(await pdf.save());
         Flushbar(
           title: 'Good Job',
+          titleColor: Colors.green,
           message: 'Save to $file',
-          duration: const Duration(seconds: 20),
+          duration: const Duration(seconds: 3),
         ).show(context);
       } else {
         final dir = await getApplicationSupportDirectory();
         final file = File('${dir.path}/${DateTime.now()}.pdf');
         await file.writeAsBytes(await pdf.save());
-        print(dir);
         Flushbar(
           title: 'Good Job',
+          titleColor: Colors.green,
           message: 'Save to $file',
-          duration: const Duration(seconds: 20),
+          duration: const Duration(seconds: 3),
         ).show(context);
       }
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }
@@ -303,14 +309,16 @@ class _ScanDocumentState extends State<ScanDocument> {
       }
       Flushbar(
         title: 'Good Job',
+        titleColor: Colors.green,
         message: 'this photo or image was removed',
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }

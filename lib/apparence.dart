@@ -23,42 +23,6 @@ class _MyAppaerancePageState extends State<MyAppearancePage>{
     getCurrentTheme();
   }
 
-  // récupère si c'est un theme sombre ou clair
-  // control if theme dark or light
-  Future getCurrentTheme() async {
-    try {
-      savedThemeMode = await AdaptiveTheme.getThemeMode();
-      if (savedThemeMode.toString() == 'AdaptiveThemeMode.dark') {
-        debugPrint('Theme dark');
-        setState(() {
-          darkmode = true;
-          iconAddress = "assets/images/darkVador.jpg";
-        });
-        Flushbar(
-          title: 'This is $savedThemeMode',
-          message: 'Is your theme',
-          duration: const Duration(seconds: 3),
-        ).show(context);
-      } else {
-        debugPrint('Theme light');
-        setState(() {
-          darkmode = false;
-          iconAddress = "assets/images/babyyoda.jpg";
-        });
-        Flushbar(
-          title: 'This is $savedThemeMode',
-          message: 'Is your theme',
-          duration: const Duration(seconds: 3),
-        ).show(context);
-      }
-    } catch (error) {
-      Flushbar(
-        title: 'Warning',
-        message: error.toString(),
-        duration: const Duration(seconds: 4),
-      ).show(context);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +49,9 @@ class _MyAppaerancePageState extends State<MyAppearancePage>{
             ),
             const SizedBox(height: 20),
             SwitchListTile(
-              title: const Text("Theme Dark"),
+                title: const Text("Theme Dark"),
                 value: darkmode,
                 onChanged: (bool value) {
-                  print(value);
                   if (value == true) {
                     AdaptiveTheme.of(context).setDark();
                     iconAddress = "assets/images/darkVador.jpg";
@@ -104,8 +67,8 @@ class _MyAppaerancePageState extends State<MyAppearancePage>{
             FloatingActionButton(
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage())
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage())
                 );
               },
               child: const Icon(Icons.home, color: Colors.white,),
@@ -114,5 +77,44 @@ class _MyAppaerancePageState extends State<MyAppearancePage>{
         ),
       ),
     );
+  }
+
+  /// control if theme dark or light
+  Future getCurrentTheme() async {
+    try {
+      savedThemeMode = await AdaptiveTheme.getThemeMode();
+      if (savedThemeMode.toString() == 'AdaptiveThemeMode.dark') {
+        debugPrint('Theme dark');
+        setState(() {
+          darkmode = true;
+          iconAddress = "assets/images/darkVador.jpg";
+        });
+        Flushbar(
+          title: 'This is $savedThemeMode',
+          titleColor: Colors.green,
+          message: 'Is your theme',
+          duration: const Duration(seconds: 3),
+        ).show(context);
+      } else {
+        debugPrint('Theme light');
+        setState(() {
+          darkmode = false;
+          iconAddress = "assets/images/babyyoda.jpg";
+        });
+        Flushbar(
+          title: 'This is $savedThemeMode',
+          titleColor: Colors.green,
+          message: 'Is your theme',
+          duration: const Duration(seconds: 3),
+        ).show(context);
+      }
+    } catch (error) {
+      Flushbar(
+        title: 'Warning',
+        titleColor: Colors.redAccent,
+        message: error.toString(),
+        duration: const Duration(seconds: 3),
+      ).show(context);
+    }
   }
 }

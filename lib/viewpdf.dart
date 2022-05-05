@@ -71,8 +71,9 @@ class _ViewPDFState extends State<ViewPDF> {
     } catch (error) {
       Flushbar(
         title: 'Warning',
+        titleColor: Colors.redAccent,
         message: error.toString(),
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       ).show(context);
     }
   }

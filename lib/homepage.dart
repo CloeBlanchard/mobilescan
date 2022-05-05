@@ -32,51 +32,6 @@ class _HomePageState extends State<HomePage> {
   // directory for ios
   final dirIOS = getApplicationSupportDirectory();
 
-  ///async function to get list of files
-  getFiles() async {
-    try {
-      if (Platform.isAndroid) {
-        try {
-          var pathRoot = await dir;
-          var filesManager = FileManager(root: pathRoot);
-          files = await filesManager.filesTree(
-            // filter list only pdf files
-              extensions: ["pdf"]);
-          // update the ui
-          setState(() {});
-        } catch (error) {
-          Flushbar(
-            title: 'Warning',
-            message: error.toString(),
-            duration: const Duration(seconds: 4),
-          ).show(context);
-        }
-      } else {
-        try {
-          var pathRoot = await dirIOS;
-          var filesManager = FileManager(root: pathRoot);
-          files = await filesManager.filesTree(
-            // filter list only pdf files
-              extensions: ["pdf"]);
-          //update the ui
-          setState(() {});
-        } catch (error) {
-          Flushbar(
-            title: 'Warning',
-            message: error.toString(),
-            duration: const Duration(seconds: 4),
-          ).show(context);
-        }
-      }
-    } catch (error) {
-      Flushbar(
-        title: 'Warning',
-        message: error.toString(),
-        duration: const Duration(seconds: 4),
-      ).show(context);
-    }
-  }
-
   @override
   void initState() {
     ///call getFiles() function on initial state.
@@ -91,6 +46,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: const Text("Home Page"),
       ),
+      /// menu burger
       drawer: Drawer(
         child: ListView(
           children: [
@@ -121,7 +77,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
       /// if files is empty display informative message
       body: Stack(
           children: [
@@ -137,6 +92,7 @@ class _HomePageState extends State<HomePage> {
               ),
             )
                 : (files.isEmpty)
+            /// files is not empty so display files information
                 ? const Center(
               child: Text(
                 "No folder available",
@@ -165,11 +121,13 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 18,
                           ),
                         ),
+                        /// dress page
                         leading: Icon(
                           Icons.picture_as_pdf,
                           color: Colors.blue.shade800,
                           size: 30,
                         ),
+                        /// remove button
                         trailing: IconButton(
                           icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
                           onPressed: () {
@@ -177,6 +135,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
                           },
                         ),
+                        /// tap to access of pdf document
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
@@ -188,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                // function to refresh the page
+                /// function to refresh the page
                 onRefresh: () {
                   return Future.delayed(
                       const Duration(seconds: 3),
@@ -205,6 +164,7 @@ class _HomePageState extends State<HomePage> {
       /// bottom navigation bar
       bottomNavigationBar: Row(
         children: <Widget>[
+          /// adaptive button to access at page scanning
           Expanded(
             child: ElevatedButton(
               onPressed: () {
@@ -238,6 +198,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  ///async function to get list of files
+  getFiles() async {
+    try {
+      if (Platform.isAndroid) {
+        try {
+          var pathRoot = await dir;
+          var filesManager = FileManager(root: pathRoot);
+          files = await filesManager.filesTree(
+            // filter list only pdf files
+              extensions: ["pdf"]);
+          // update the ui
+          setState(() {});
+        } catch (error) {
+          Flushbar(
+            title: 'Warning',
+            titleColor: Colors.redAccent,
+            message: error.toString(),
+            duration: const Duration(seconds: 3),
+          ).show(context);
+        }
+      } else {
+        try {
+          var pathRoot = await dirIOS;
+          var filesManager = FileManager(root: pathRoot);
+          files = await filesManager.filesTree(
+            // filter list only pdf files
+              extensions: ["pdf"]);
+          //update the ui
+          setState(() {});
+        } catch (error) {
+          Flushbar(
+            title: 'Warning',
+            titleColor: Colors.redAccent,
+            message: error.toString(),
+            duration: const Duration(seconds: 3),
+          ).show(context);
+        }
+      }
+    } catch (error) {
+      Flushbar(
+        title: 'Warning',
+        titleColor: Colors.redAccent,
+        message: error.toString(),
+        duration: const Duration(seconds: 3),
+      ).show(context);
+    }
+  }
+
   /// function who delete file
   Future<void> _onDelete(File file) async {
     try {
@@ -247,8 +255,13 @@ class _HomePageState extends State<HomePage> {
 
         });
       }
-    } catch (e) {
-      return;
+    } catch (error) {
+      Flushbar(
+        title: 'Warning',
+        titleColor: Colors.redAccent,
+        message: error.toString(),
+        duration: const Duration(seconds: 3),
+      ).show(context);
     }
   }
 }

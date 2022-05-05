@@ -8,7 +8,10 @@ import 'homepage.dart';
 
 class ViewPDF extends StatefulWidget {
   String pathPDF = "";
-  ViewPDF({Key? key, required this.pathPDF, }) : super(key: key);
+  ViewPDF({
+    Key? key,
+    required this.pathPDF,
+  }) : super(key: key);
 
   @override
   State<ViewPDF> createState() => _ViewPDFState();
@@ -22,8 +25,10 @@ class _ViewPDFState extends State<ViewPDF> {
         centerTitle: true,
         title: Text(widget.pathPDF.split('/').last),
       ),
-      body: PdfView(
-        path: widget.pathPDF,
+      body: SizedBox(
+        child: PdfView(
+          path: widget.pathPDF,
+        ),
       ),
       bottomNavigationBar: Row(
         children: <Widget>[
@@ -54,7 +59,6 @@ class _ViewPDFState extends State<ViewPDF> {
       ),
     );
   }
-
 
   ///function who share file withe shareFile with filePicker
   void _onShare(BuildContext context) async {

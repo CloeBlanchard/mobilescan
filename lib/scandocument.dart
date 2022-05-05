@@ -115,15 +115,16 @@ class _ScanDocumentState extends State<ScanDocument> {
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
+                  children: [
+                    const Icon(
                       Icons.picture_as_pdf,
                       size: 31,
                     ),
                     Text(
                       'Convert to pdf',
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 1,
                     ),
                   ],
                 ),

@@ -148,48 +148,58 @@ class _HomePageState extends State<HomePage> {
             )
             /// if files is not empty, display listView of document scanned
             /// pull down to refresh page
-                : ListView.builder(
-              ///if file/folder list is grabbed, then show here
-              itemCount: files.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.only(
-                        left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                    title: Text(
-                      ///display only the file name
-                      files[index].path.split('/').last,
-                      style: const TextStyle(
-                        fontSize: 18,
+                : RefreshIndicator(
+                child: ListView.builder(
+                  ///if file/folder list is grabbed, then show here
+                  itemCount: files.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                        title: Text(
+                          ///display only the file name
+                          files[index].path.split('/').last,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        leading: Icon(
+                          Icons.picture_as_pdf,
+                          color: Colors.blue.shade800,
+                          size: 30,
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
+                          onPressed: () {
+                            _onDelete(File(files[index].path));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          },
+                        ),
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                                ///open viewPDF page on click
+                                return ViewPDF(pathPDF: files[index].path);
+                              }));
+                        },
                       ),
-                    ),
-                    leading: Icon(
-                      Icons.picture_as_pdf,
-                      color: Colors.blue.shade800,
-                      size: 30,
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
-                      onPressed: () {
-                        _onDelete(File(files[index].path));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomePage())
-                        );
-                      },
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            ///open viewPDF page on click
-                            return ViewPDF(pathPDF: files[index].path);
-                          }));
-                    },
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                ),
+                // function to refresh the page
+                onRefresh: () {
+                  return Future.delayed(
+                      const Duration(seconds: 3),
+                          () {
+                        setState(() {
+                          files.add(getFiles());
+                        });
+                      }
+                  );
+                }
+            )
           ]
       ),
       /// bottom navigation bar
@@ -233,6 +243,9 @@ class _HomePageState extends State<HomePage> {
     try {
       if (await file.exists()) {
         await file.delete();
+        setState(() {
+
+        });
       }
     } catch (e) {
       return;

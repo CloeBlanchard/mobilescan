@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:appscan/settingspage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
@@ -11,9 +12,9 @@ import 'package:path_provider/path_provider.dart';
 
 /// import scan document page
 import 'scandocument.dart';
+
 /// import view pdf page
 import 'viewpdf.dart';
-
 
 ///apply this class on home: attribute at MaterialApp()
 class HomePage extends StatefulWidget {
@@ -24,14 +25,15 @@ class HomePage extends StatefulWidget {
     return _HomePageState(); //create state
   }
 }
+
 class _HomePageState extends State<HomePage> {
-  dynamic files;
+  List<File> files = [];
   final dir = getExternalStorageDirectory();
   // directory for ios
   final dirIOS = getApplicationSupportDirectory();
 
   ///async function to get list of files
-  void getFiles() async {
+  getFiles() async {
     try {
       if (Platform.isAndroid) {
         try {
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           files = await filesManager.filesTree(
             // filter list only pdf files
               extensions: ["pdf"]);
-          // updtate the ui
+          // update the ui
           setState(() {});
         } catch (error) {
           Flushbar(
@@ -54,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           var pathRoot = await dirIOS;
           var filesManager = FileManager(root: pathRoot);
           files = await filesManager.filesTree(
-            // filteer list only pdf files
+            // filter list only pdf files
               extensions: ["pdf"]);
           //update the ui
           setState(() {});
@@ -119,80 +121,79 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+
       /// if files is empty display informative message
-      body: (files.isEmpty)
-          ? const Center(
-        child: Text(
-          "No folder available",
-          style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-      )
-      /// if files is not empty, display listView of document scanned
-      /// pull down to refresh page
-          : RefreshIndicator(
-        child: ListView.builder(
-          ///if file/folder list is grabbed, then show here
-          itemCount: files?.length ?? 0,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                contentPadding: const EdgeInsets.only(
-                    left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                title: Text(
-                  ///display only the file name
-                  files[index].path.split('/').last,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                leading: Icon(
-                  Icons.picture_as_pdf,
-                  color: Colors.blue.shade900,
-                  size: 30,
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.pink.shade900,
-                  size: 30,
-                ),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        ///open viewPDF page on click
-                        return ViewPDF(pathPDF: files[index].path.toString());
-                      }));
-                },
+      body: Stack(
+          children: [
+            // if file is empty display text
+            (files.isEmpty)
+                ? Center(
+              child: Text(
+                "No file available",
+                textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                maxLines: 1,
+                style: const TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            );
-          },
-        ),
-        // function who refresh the page
-        onRefresh: () {
-          return Future.delayed(
-              const Duration(seconds: 1),
-                  () {
-                setState(() {
-                  files.add([getFiles()]);
-                });
-              }
-          );
-        },
+            )
+                : (files.isEmpty)
+                ? const Center(
+              child: Text(
+                "No folder available",
+                style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+            )
+            /// if files is not empty, display listView of document scanned
+            /// pull down to refresh page
+                : ListView.builder(
+              ///if file/folder list is grabbed, then show here
+              itemCount: files.length,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                    title: Text(
+                      ///display only the file name
+                      files[index].path.split('/').last,
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    leading: Icon(
+                      Icons.picture_as_pdf,
+                      color: Colors.blue.shade900,
+                      size: 30,
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward,
+                      size: 30,
+                      color: Colors.pink.shade900,
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            ///open viewPDF page on click
+                            return ViewPDF(pathPDF: files[index].path);
+                          }));
+                    },
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       /// bottom navigation bar
       bottomNavigationBar: SizedBox(
         height: 80,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ScanDocument()
-                )
-            );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ScanDocument()));
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -203,10 +204,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Text(
                 "Scan doc Page",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
           ),

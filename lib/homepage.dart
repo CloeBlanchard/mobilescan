@@ -78,88 +78,88 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       /// if files is empty display informative message
-      body: Stack(
-          children: [
-            // if file is empty display text
-            (files.isEmpty)
-                ? Center(
-              child: Text(
-                "No file available",
-                textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                maxLines: 1,
-                style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            )
-                : (files.isEmpty)
-            /// files is not empty so display files information
-                ? const Center(
-              child: Text(
-                "No folder available",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold
+      body: RefreshIndicator(
+        /// function to refresh the page
+          onRefresh: () {
+            return Future.delayed(
+                const Duration(seconds: 3),
+                    () {
+                  setState(() {
+                    files.add(getFiles());
+                  });
+                }
+            );
+          },
+        child: Stack(
+            children: [
+              // if file is empty display text
+              (files.isEmpty)
+                  ? Center(
+                child: Text(
+                  "No file available",
+                  textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                  maxLines: 1,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-            )
-            /// if files is not empty, display listView of document scanned
-            /// pull down to refresh page
-                : RefreshIndicator(
-                child: ListView.builder(
-                  ///if file/folder list is grabbed, then show here
-                  itemCount: files.length,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.only(
-                            left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                        title: Text(
-                          ///display only the file name
-                          files[index].path.split('/').last,
-                          style: const TextStyle(
-                            fontSize: 18,
+              )
+                  : (files.isEmpty)
+              /// files is not empty so display files information
+                  ? const Center(
+                child: Text(
+                  "No folder available",
+                  style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              )
+              /// if files is not empty, display listView of document scanned
+              /// pull down to refresh page
+                  : ListView.builder(
+                    ///if file/folder list is grabbed, then show here
+                    itemCount: files.length,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                          title: Text(
+                            ///display only the file name
+                            files[index].path.split('/').last,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        /// dress page
-                        leading: Icon(
-                          Icons.picture_as_pdf,
-                          color: Colors.blue.shade800,
-                          size: 30,
-                        ),
-                        /// remove button
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
-                          onPressed: () {
-                            _onDelete(File(files[index].path));
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          /// dress page
+                          leading: Icon(
+                            Icons.picture_as_pdf,
+                            color: Colors.blue.shade800,
+                            size: 30,
+                          ),
+                          /// remove button
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete_forever, size: 30, color: Colors.pink.shade800,),
+                            onPressed: () {
+                              _onDelete(File(files[index].path));
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                            },
+                          ),
+                          /// tap to access of pdf document
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                                  ///open viewPDF page on click
+                                  return ViewPDF(pathPDF: files[index].path);
+                                }));
                           },
                         ),
-                        /// tap to access of pdf document
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                                ///open viewPDF page on click
-                                return ViewPDF(pathPDF: files[index].path);
-                              }));
-                        },
-                      ),
-                    );
-                  },
-                ),
-                /// function to refresh the page
-                onRefresh: () {
-                  return Future.delayed(
-                      const Duration(seconds: 3),
-                          () {
-                        setState(() {
-                          files.add(getFiles());
-                        });
-                      }
-                  );
-                }
-            )
-          ]
+                      );
+                    },
+                  ),
+            ]
+        ),
       ),
       /// bottom navigation bar
       bottomNavigationBar: Row(
